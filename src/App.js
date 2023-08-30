@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { uid } from "uid";
 import useLocalStorageState from "use-local-storage-state";
 
 function App() {
+  const [isForGoodWeather, setIsForGoodWeather] = useState(true);
   const [entries, setEntries] = useLocalStorageState("activities", {
     defaultValue: [
       {
@@ -14,14 +15,21 @@ function App() {
     ],
   });
 
-  const isForGoodWeather = true;
+  // useEffect(() => {
+  //   fetchWeather();
+  // }, []);
+
+  async function fetchWeather() {
+    const response = await fetch("https://example-apis.vercel.app/api/weather");
+    const weatherData = await response.json;
+    setIsForGoodWeather(weatherData.isGoodWeather);
+  }
+
   const filteredArray = entries.filter((entry) => {
     return entry.isForGoodWeather === isForGoodWeather;
   });
 
   function handleSubmit(activityName, isForGoodWeather) {
-    console.log("entires---inSubmit", entries);
-
     setEntries([
       {
         id: uid(),
@@ -39,32 +47,20 @@ function App() {
       </header>
       <main>
         <Form onHandleSubmit={handleSubmit} />
-
-        <ul>
-          {filteredArray.map((entry) => {
-            return (
-              <List
-                id={entry.id}
-                activityName={entry.activityName}
-                isForGoodWeather={entry.isForGoodWeather}
-              />
-            );
-          })}{" "}
-        </ul>
+        <List entries={filteredArray} isForGoodWeather={isForGoodWeather} />
       </main>
     </div>
   );
 }
 
 function Form({ onHandleSubmit }) {
-  const [activityName, setActivityName] = useState("");
-  const [isForGoodWeather, setIsForGoodWeather] = useState(false);
-
   function handleSubmit(event) {
     event.preventDefault();
-    setActivityName(event.target.activityName.value);
-    setIsForGoodWeather(event.target.isForGoodWeather.checked);
-    onHandleSubmit(activityName, isForGoodWeather);
+
+    onHandleSubmit(
+      event.target.activityName.value,
+      event.target.isForGoodWeather.checked
+    );
   }
   return (
     <>
@@ -82,8 +78,22 @@ function Form({ onHandleSubmit }) {
   );
 }
 
-function List({ id, activityName, isForGoodWeather }) {
-  return <li key={id}>{activityName}</li>;
+function List({ entries, isForGoodWeather }) {
+  return (
+    <>
+      <h3>
+        {isForGoodWeather
+          ? `Activities for good weather:`
+          : `Activities for bad weather:`}
+      </h3>
+
+      <ul>
+        {entries.map((entry) => (
+          <li key={entry.id}>{entry.activityName}</li>
+        ))}
+      </ul>
+    </>
+  );
 }
 
 export default App;
