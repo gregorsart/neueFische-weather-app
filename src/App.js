@@ -1,11 +1,23 @@
 import { useState } from "react";
 import "./App.css";
 import { uid } from "uid";
+import useLocalStorageState from "use-local-storage-state";
 
 function App() {
-  const [entries, setEntries] = useState([
-    { id: uid(), activityName: "Swimming in the sea", isForGoodWeather: true },
-  ]);
+  const [entries, setEntries] = useLocalStorageState("activities", {
+    defaultValue: [
+      {
+        id: uid(),
+        activityName: "Swimming in the sea",
+        isForGoodWeather: true,
+      },
+    ],
+  });
+
+  const isForGoodWeather = true;
+  const filteredArray = entries.filter((entry) => {
+    return entry.isForGoodWeather === isForGoodWeather;
+  });
 
   function handleSubmit(activityName, isForGoodWeather) {
     console.log("entires---inSubmit", entries);
@@ -29,7 +41,7 @@ function App() {
         <Form onHandleSubmit={handleSubmit} />
 
         <ul>
-          {entries.map((entry) => {
+          {filteredArray.map((entry) => {
             return (
               <List
                 id={entry.id}
@@ -71,11 +83,7 @@ function Form({ onHandleSubmit }) {
 }
 
 function List({ id, activityName, isForGoodWeather }) {
-  return (
-    <ul>
-      <li key={id}>{activityName}</li>
-    </ul>
-  );
+  return <li key={id}>{activityName}</li>;
 }
 
 export default App;
