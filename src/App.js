@@ -3,30 +3,12 @@ import "./App.css";
 import { uid } from "uid";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Weather App</h1>
-      </header>
-      <main>
-        <Form />
-      </main>
-    </div>
-  );
-}
-
-function Form() {
   const [entries, setEntries] = useState([
     { id: uid(), activityName: "Swimming in the sea", isForGoodWeather: true },
   ]);
-  const [activityName, setActivityName] = useState("");
-  const [isForGoodWeather, setIsForGoodWeather] = useState(false);
 
-  function handleSubmit(event) {
+  function handleSubmit(activityName, isForGoodWeather) {
     console.log("entires---inSubmit", entries);
-    event.preventDefault();
-    setActivityName(event.target.activityName.value);
-    setIsForGoodWeather(event.target.isForGoodWeather.checked);
 
     setEntries([
       {
@@ -36,6 +18,41 @@ function Form() {
       },
       ...entries,
     ]);
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Weather App</h1>
+      </header>
+      <main>
+        <Form onHandleSubmit={handleSubmit} />
+
+        <ul>
+          {entries.map((entry) => {
+            return (
+              <List
+                id={entry.id}
+                activityName={entry.activityName}
+                isForGoodWeather={entry.isForGoodWeather}
+              />
+            );
+          })}{" "}
+        </ul>
+      </main>
+    </div>
+  );
+}
+
+function Form({ onHandleSubmit }) {
+  const [activityName, setActivityName] = useState("");
+  const [isForGoodWeather, setIsForGoodWeather] = useState(false);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setActivityName(event.target.activityName.value);
+    setIsForGoodWeather(event.target.isForGoodWeather.checked);
+    onHandleSubmit(activityName, isForGoodWeather);
   }
   return (
     <>
@@ -49,8 +66,15 @@ function Form() {
         </div>
         <button type="submit">Submit</button>
       </form>
-      {console.log("entires---below", entries)}
     </>
+  );
+}
+
+function List({ id, activityName, isForGoodWeather }) {
+  return (
+    <ul>
+      <li key={id}>{activityName}</li>
+    </ul>
   );
 }
 
