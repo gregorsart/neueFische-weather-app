@@ -32,7 +32,6 @@ function App() {
       );
       const weatherData = await response.json();
       setIsForGoodWeather(weatherData.isGoodWeather);
-      console.log("weather update:");
     }
     fetchWeather();
 

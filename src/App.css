@@ -4,16 +4,28 @@ form {
   gap: 1rem;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 100;
+}
+
+h1 {
+  text-align: center;
+}
+
 button {
   padding: 1rem;
   cursor: pointer;
   border: 2px solid turquoise;
   border-radius: 0.5rem;
   background-color: rgb(176, 192, 206);
+  font-size: 1.2rem;
 }
 
 button:hover {
-  background-color: aqua;
+  background-color: turquoise;
 }
 
 input {
@@ -42,10 +54,28 @@ li:nth-child(even) {
   background-color: rgba(127, 255, 212, 0.29);
 }
 
+input[type="checkbox"] {
+  width: 2rem;
+  height: 2rem;
+  accent-color: turquoise;
+}
+
+input[type="checkbox"]::after {
+  width: 2rem;
+  height: 2rem;
+  accent-color: turquoise;
+}
+
 /* SPECIFIC CLASSES (BEM) */
 
 .button__delete {
   background-color: transparent;
   border: none;
   padding: 0;
+}
+
+.checkbox__container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
