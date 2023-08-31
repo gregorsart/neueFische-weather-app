@@ -8,6 +8,7 @@ import useLocalStorageState from "use-local-storage-state";
 function App() {
   // STATES
   const [isForGoodWeather, setIsForGoodWeather] = useState();
+  const [filteredEntries, setFilteredEntries] = useState([]);
   const [entries, setEntries] = useLocalStorageState("activities", {
     defaultValue: [
       {
@@ -22,7 +23,8 @@ function App() {
       },
     ],
   });
-  // EFFECT
+
+  // EFFECT for fetching weather
   useEffect(() => {
     async function fetchWeather() {
       const response = await fetch(
@@ -30,14 +32,23 @@ function App() {
       );
       const weatherData = await response.json();
       setIsForGoodWeather(weatherData.isGoodWeather);
+      console.log("weather update:");
     }
     fetchWeather();
+
+    const interval = setInterval(fetchWeather, 4000);
+    return () => clearInterval(interval);
   }, []);
-  // FILTER
-  const filteredArray = entries.filter((entry) => {
-    return entry.isForGoodWeather === isForGoodWeather;
-  });
-  // LOGIK
+
+  // EFFECT for filtering entries
+  useEffect(() => {
+    const filteredArray = entries.filter((entry) => {
+      return entry.isForGoodWeather === isForGoodWeather;
+    });
+    setFilteredEntries(filteredArray);
+  }, [entries, isForGoodWeather]);
+
+  // LOGIC for form submission
   function handleSubmit(activityName, isForGoodWeather) {
     setEntries([
       {
@@ -49,6 +60,13 @@ function App() {
     ]);
   }
 
+  // DELETE (ON CLICK)
+  function handleClick(id) {
+    const deleteEntries = entries.filter((_entry) => _entry.id !== id);
+    setEntries(deleteEntries);
+    console.log("delete___", deleteEntries);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -56,7 +74,11 @@ function App() {
       </header>
       <main>
         <Form onHandleSubmit={handleSubmit} />
-        <List entries={filteredArray} isForGoodWeather={isForGoodWeather} />
+        <List
+          entries={filteredEntries}
+          isForGoodWeather={isForGoodWeather}
+          onHandleClick={handleClick}
+        />
       </main>
     </div>
   );
