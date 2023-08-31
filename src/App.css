@@ -22,3 +22,30 @@ input {
   border: transparent;
   border-radius: 0.5rem;
 }
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem;
+  background-color: rgba(127, 255, 212, 0.552);
+  width: fit-content;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+li:nth-child(even) {
+  background-color: rgba(127, 255, 212, 0.29);
+}
+
+/* SPECIFIC CLASSES (BEM) */
+
+.button__delete {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
