@@ -4,15 +4,78 @@ form {
   gap: 1rem;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 100;
+}
+
+h1 {
+  text-align: center;
+}
+
 button {
   padding: 1rem;
   cursor: pointer;
+  border: 2px solid turquoise;
+  border-radius: 0.5rem;
+  background-color: rgb(176, 192, 206);
+  font-size: 1.2rem;
 }
 
 button:hover {
-  background-color: aqua;
+  background-color: turquoise;
 }
 
 input {
-  padding: 0.5rem;
+  padding: 1.2rem;
+  background-color: rgb(199, 212, 223);
+  border: transparent;
+  border-radius: 0.5rem;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem;
+  background-color: rgba(127, 255, 212, 0.552);
+  width: fit-content;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+li:nth-child(even) {
+  background-color: rgba(127, 255, 212, 0.29);
+}
+
+input[type="checkbox"] {
+  width: 2rem;
+  height: 2rem;
+  accent-color: turquoise;
+}
+
+input[type="checkbox"]::after {
+  width: 2rem;
+  height: 2rem;
+  accent-color: turquoise;
+}
+
+/* SPECIFIC CLASSES (BEM) */
+
+.button__delete {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.checkbox__container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }

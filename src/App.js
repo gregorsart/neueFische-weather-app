@@ -1,33 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import Form from "./components/Form";
+import List from "./components/List";
 import { uid } from "uid";
+import useLocalStorageState from "use-local-storage-state";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Weather App</h1>
-      </header>
-      <main>
-        <Form />
-      </main>
-    </div>
-  );
-}
+  // STATES
+  const [isForGoodWeather, setIsForGoodWeather] = useState();
+  const [filteredEntries, setFilteredEntries] = useState([]);
+  const [entries, setEntries] = useLocalStorageState("activities", {
+    defaultValue: [
+      {
+        id: uid(),
+        activityName: "Swimming in the sea",
+        isForGoodWeather: true,
+      },
+      {
+        id: uid(),
+        activityName: "Reading a book at the beach",
+        isForGoodWeather: false,
+      },
+    ],
+  });
 
-function Form() {
-  const [entries, setEntries] = useState([
-    { id: uid(), activityName: "Swimming in the sea", isForGoodWeather: true },
-  ]);
-  const [activityName, setActivityName] = useState("");
-  const [isForGoodWeather, setIsForGoodWeather] = useState(false);
+  // EFFECT for fetching weather
+  useEffect(() => {
+    async function fetchWeather() {
+      const response = await fetch(
+        "https://example-apis.vercel.app/api/weather"
+      );
+      const weatherData = await response.json();
+      setIsForGoodWeather(weatherData.isGoodWeather);
+    }
+    fetchWeather();
 
-  function handleSubmit(event) {
-    console.log("entires---inSubmit", entries);
-    event.preventDefault();
-    setActivityName(event.target.activityName.value);
-    setIsForGoodWeather(event.target.isForGoodWeather.checked);
+    const interval = setInterval(fetchWeather, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
+  // EFFECT for filtering entries
+  useEffect(() => {
+    const filteredArray = entries.filter((entry) => {
+      return entry.isForGoodWeather === isForGoodWeather;
+    });
+    setFilteredEntries(filteredArray);
+  }, [entries, isForGoodWeather]);
+
+  // LOGIC for form submission
+  function handleSubmit(activityName, isForGoodWeather) {
     setEntries([
       {
         id: uid(),
@@ -37,20 +58,28 @@ function Form() {
       ...entries,
     ]);
   }
+
+  // DELETE (ON CLICK)
+  function handleClick(id) {
+    const deleteEntries = entries.filter((_entry) => _entry.id !== id);
+    setEntries(deleteEntries);
+    console.log("delete___", deleteEntries);
+  }
+
   return (
-    <>
-      <h2>Add new Activity:</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="text">Name of Activity:</label>
-        <input id="text" name="activityName" />
-        <div>
-          <input type="checkbox" name="isForGoodWeather" id="weather" />
-          <label htmlFor="weather">Good-weather activity</label>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-      {console.log("entires---below", entries)}
-    </>
+    <div className="App">
+      <header className="App-header">
+        <h1>Weather App</h1>
+      </header>
+      <main>
+        <Form onHandleSubmit={handleSubmit} />
+        <List
+          entries={filteredEntries}
+          isForGoodWeather={isForGoodWeather}
+          onHandleClick={handleClick}
+        />
+      </main>
+    </div>
   );
 }
 
