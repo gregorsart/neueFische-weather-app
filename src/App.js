@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Form from "./components/Form";
 import List from "./components/List";
+import Widget from "./components/Widget";
 import { uid } from "uid";
 import useLocalStorageState from "use-local-storage-state";
 
 function App() {
   // STATES
-  const [isForGoodWeather, setIsForGoodWeather] = useState();
+  const [dataFromApi, setDataFromApi] = useState({});
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [entries, setEntries] = useLocalStorageState("activities", {
     defaultValue: [
@@ -31,7 +32,7 @@ function App() {
         "https://example-apis.vercel.app/api/weather"
       );
       const weatherData = await response.json();
-      setIsForGoodWeather(weatherData.isGoodWeather);
+      setDataFromApi(weatherData);
     }
     fetchWeather();
 
@@ -42,10 +43,10 @@ function App() {
   // EFFECT for filtering entries
   useEffect(() => {
     const filteredArray = entries.filter((entry) => {
-      return entry.isForGoodWeather === isForGoodWeather;
+      return entry.isForGoodWeather === dataFromApi.isGoodWeather;
     });
     setFilteredEntries(filteredArray);
-  }, [entries, isForGoodWeather]);
+  }, [entries, dataFromApi]);
 
   // LOGIC for form submission
   function handleSubmit(activityName, isForGoodWeather) {
@@ -72,10 +73,11 @@ function App() {
         <h1>Weather App</h1>
       </header>
       <main>
+        <Widget dataFromApi={dataFromApi} />
         <Form onHandleSubmit={handleSubmit} />
         <List
           entries={filteredEntries}
-          isForGoodWeather={isForGoodWeather}
+          isForGoodWeather={dataFromApi}
           onHandleClick={handleClick}
         />
       </main>
