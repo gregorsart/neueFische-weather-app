@@ -2,6 +2,9 @@ form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  border: 2px solid rgb(148, 215, 211);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
 }
 
 h1,
@@ -12,27 +15,45 @@ h4 {
 }
 
 h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+h1,
+h2 {
   text-align: center;
 }
 
+hr {
+  border: 1px solid rgb(148, 215, 211);
+  outline: none;
+}
 button {
-  padding: 1rem;
+  align-self: flex-end;
+  padding: 1rem 2.5rem;
   cursor: pointer;
   border: 2px solid turquoise;
   border-radius: 0.5rem;
   background-color: rgb(176, 192, 206);
   font-size: 1.2rem;
+  width: fit-content;
 }
 
 button:hover {
   background-color: turquoise;
 }
 
-input {
+input[type="text"] {
   padding: 1.2rem;
   background-color: rgb(199, 212, 223);
   border: transparent;
   border-radius: 0.5rem;
+  outline: 2px dashed rgb(190, 190, 190);
+  outline-offset: 0.2rem;
+}
+
+input[type="text"]:focus {
+  outline: 2px dashed rgb(84, 195, 174);
 }
 
 ul {

@@ -12,7 +12,7 @@ export default function Form({ onHandleSubmit }) {
       <h2>Add new Activity:</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="text">Name of Activity:</label>
-        <input id="text" name="activityName" />
+        <input type="text" id="text" name="activityName" />
         <div className="checkbox__container">
           <input type="checkbox" name="isForGoodWeather" id="weather" />
           <label htmlFor="weather">Good-weather activity</label>

@@ -71,10 +71,13 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Weather App</h1>
+        <hr />
       </header>
       <main>
         <Widget dataFromApi={dataFromApi} />
+
         <Form onHandleSubmit={handleSubmit} />
+
         <List
           entries={filteredEntries}
           isForGoodWeather={dataFromApi}
