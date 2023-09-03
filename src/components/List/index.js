@@ -1,7 +1,4 @@
 export default function List({ entries, isForGoodWeather, onHandleClick }) {
-  function handleClick(id) {
-    onHandleClick(id);
-  }
   return (
     <>
       <h3>
@@ -17,7 +14,7 @@ export default function List({ entries, isForGoodWeather, onHandleClick }) {
             <button
               className="button__delete"
               type="button"
-              onClick={() => handleClick(entry.id)}
+              onClick={() => onHandleClick(entry.id)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

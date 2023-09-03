@@ -1,11 +1,12 @@
-export default function Form({ onHandleSubmit }) {
+export default function Form({ onHandleActivity }) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    onHandleSubmit(
+    onHandleActivity(
       event.target.activityName.value,
       event.target.isForGoodWeather.checked
     );
+    event.target.reset();
   }
   return (
     <>

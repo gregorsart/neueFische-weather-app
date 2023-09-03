@@ -9,20 +9,23 @@ import useLocalStorageState from "use-local-storage-state";
 function App() {
   // STATES
   const [dataFromApi, setDataFromApi] = useState({});
-  const [filteredEntries, setFilteredEntries] = useState([]);
-  const [entries, setEntries] = useLocalStorageState("activities", {
+  const [activities, setActivities] = useLocalStorageState("activities", {
     defaultValue: [
       {
         id: uid(),
-        activityName: "Swimming in the sea",
-        isForGoodWeather: true,
+        activityName: "Visiting a museum",
+        isForGoodWeather: false,
       },
       {
         id: uid(),
         activityName: "Reading a book at the beach",
-        isForGoodWeather: false,
+        isForGoodWeather: true,
       },
     ],
+  });
+  // Always update the filtered Activites on rerender
+  const filteredActivitesArray = activities.filter((activity) => {
+    return activity.isForGoodWeather === dataFromApi.isGoodWeather;
   });
 
   // EFFECT for fetching weather
@@ -40,31 +43,22 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // EFFECT for filtering entries
-  useEffect(() => {
-    const filteredArray = entries.filter((entry) => {
-      return entry.isForGoodWeather === dataFromApi.isGoodWeather;
-    });
-    setFilteredEntries(filteredArray);
-  }, [entries, dataFromApi]);
-
   // LOGIC for form submission
-  function handleSubmit(activityName, isForGoodWeather) {
-    setEntries([
+  function handleActicity(activityName, isForGoodWeather) {
+    setActivities([
       {
         id: uid(),
         activityName: activityName,
         isForGoodWeather: isForGoodWeather,
       },
-      ...entries,
+      ...activities,
     ]);
   }
 
   // DELETE (ON CLICK)
   function handleClick(id) {
-    const deleteEntries = entries.filter((_entry) => _entry.id !== id);
-    setEntries(deleteEntries);
-    console.log("delete___", deleteEntries);
+    const deleteEntries = activities.filter((_entry) => _entry.id !== id);
+    setActivities(deleteEntries);
   }
 
   return (
@@ -76,11 +70,11 @@ function App() {
       <main>
         <Widget dataFromApi={dataFromApi} />
 
-        <Form onHandleSubmit={handleSubmit} />
+        <Form onHandleActivity={handleActicity} />
 
         <List
-          entries={filteredEntries}
-          isForGoodWeather={dataFromApi}
+          entries={filteredActivitesArray}
+          isForGoodWeather={dataFromApi.isGoodWeather}
           onHandleClick={handleClick}
         />
       </main>
