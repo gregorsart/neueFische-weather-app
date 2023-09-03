@@ -25,7 +25,7 @@ h2 {
 }
 
 hr {
-  border: 1px solid rgb(148, 215, 211);
+  border: 1px dotted rgba(148, 215, 210, 0.479);
   outline: none;
 }
 button {
@@ -45,7 +45,7 @@ button:hover {
 
 input[type="text"] {
   padding: 1.2rem;
-  background-color: rgb(199, 212, 223);
+  background-color: rgba(199, 212, 223, 0.481);
   border: transparent;
   border-radius: 0.5rem;
   outline: 2px dashed rgb(190, 190, 190);

@@ -56,7 +56,7 @@ function App() {
   }
 
   // DELETE (ON CLICK)
-  function handleClick(id) {
+  function handleDeleteActivity(id) {
     const deleteEntries = activities.filter((_entry) => _entry.id !== id);
     setActivities(deleteEntries);
   }
@@ -69,14 +69,14 @@ function App() {
       </header>
       <main>
         <Widget dataFromApi={dataFromApi} />
-
-        <Form onHandleActivity={handleActicity} />
-
+        <hr />
         <List
           entries={filteredActivitesArray}
           isForGoodWeather={dataFromApi.isGoodWeather}
-          onHandleClick={handleClick}
+          onHandleDeleteActivity={handleDeleteActivity}
         />
+        <hr />
+        <Form onHandleActivity={handleActicity} />
       </main>
     </div>
   );
